@@ -1,0 +1,38 @@
+@CHARSET "UTF-8";
+
+body {
+	padding : 0px;
+	margin : 0px;
+}
+
+.header {
+	background-color: #736F6F;
+	color: white;
+	text-align: center;
+	padding : 6px;
+	margin-top : 0px;
+}
+
+.result {
+	display: block;
+	padding-left: 32px;
+	padding-top: 10px;
+}
+
+.description {
+	display: block;
+	padding-left: 32px;
+	padding-top: 10px;
+}
+
+a {
+	padding-top: 40px;
+	padding-right: 83px;
+	text-align: right;
+	display: block;
+}
+
+.footer {
+	padding-top: 104px;
+	text-align: center;
+}
