@@ -1,7 +1,8 @@
 package com.acceptedboy.service.impl;
 
 import org.springframework.stereotype.Service;
-import com.acceptedboy.po.User;
+
+import com.acceptedboy.domain.po.User;
 import com.acceptedboy.service.UserService;
 import com.acceptedboy.service.base.impl.BaseServiceImpl;
 
