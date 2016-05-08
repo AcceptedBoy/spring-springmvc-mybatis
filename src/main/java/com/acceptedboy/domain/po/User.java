@@ -1,4 +1,4 @@
-package com.acceptedboy.po;
+package com.acceptedboy.domain.po;
 
 public class User {
 
