@@ -2,6 +2,11 @@ package com.acceptedboy.web.config;
 
 import java.beans.PropertyVetoException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.sql.DataSource;
 
@@ -12,9 +17,15 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -87,4 +98,33 @@ public class RootConfig {
 		return multipartResolver;
 	}
 	
+	@Bean
+	public RequestMappingHandlerAdapter requestMappingHandlerAdapter() {
+
+		RequestMappingHandlerAdapter requestMappingHadler = new RequestMappingHandlerAdapter();
+		List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
+		messageConverters.add(jacksonConverter());
+		requestMappingHadler.setMessageConverters(messageConverters);
+		return requestMappingHadler;
+	}
+
+	@Bean
+	public MappingJackson2HttpMessageConverter jacksonConverter() {
+		MappingJackson2HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter();
+		final Map<String, String> parameterMap = new HashMap<String, String>(4);
+		parameterMap.put("charset", "utf-8");
+		MediaType type = new MediaType("application","json", parameterMap);
+		List<MediaType> supportedMediaTypes = new ArrayList<>();
+		supportedMediaTypes.add(type);
+		jacksonConverter.setSupportedMediaTypes(supportedMediaTypes);
+		return jacksonConverter;
+	}
+	
+	@Bean
+	public CharacterEncodingFilter characterEncodingFilter() {
+
+		CharacterEncodingFilter filter = new CharacterEncodingFilter();
+		filter.setEncoding("UTF-8");
+		return filter;
+	}
 }

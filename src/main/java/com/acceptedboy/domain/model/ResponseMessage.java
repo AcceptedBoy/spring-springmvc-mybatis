@@ -1,6 +1,7 @@
 package com.acceptedboy.domain.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -15,35 +16,35 @@ public class ResponseMessage {
     
     private boolean success; //whether success or not
     private Type type;	//the enum
-    private String text; // the json data to client
+    private Object text; // the json data to client
     private String code; //the appointment between frontend and backstage
-    private List<Error> errors = new ArrayList<Error>();
+    private List<ErrorInfo> errors = new ArrayList<>();
 
-    public ResponseMessage(Type type, String text, boolean success) {
+    public ResponseMessage(Type type, Object text, boolean success) {
         this.type = type;
         this.text = text;
         this.success = success;
     }
     
-    public ResponseMessage(Type type, String text, boolean success, List<Error> errors) {
+    public ResponseMessage(Type type, Object text, boolean success, List<ErrorInfo> errors) {
         this.type = type;
         this.text = text;
         this.success = success;
         this.errors = errors;
     }
 
-    public ResponseMessage(Type type, String code, String text, boolean success) {
+    public ResponseMessage(Type type, String code, Object text, boolean success) {
         this.type = type;
         this.code = code;
         this.text = text;
         this.success = success;
     }
     
-    public boolean whetherSuccess() {
+    public boolean getSuccess() {
     	return success;
     }
 
-    public String getText() {
+    public Object getText() {
         return text;
     }
 
@@ -55,70 +56,38 @@ public class ResponseMessage {
         return code;
     }
     
-    public static ResponseMessage success(String text) {
+    public List<ErrorInfo> getErrors() {
+    	return errors;
+    }
+    
+    public static ResponseMessage success(Object text) {
         return new ResponseMessage(Type.SUCCESS, text, true);
     }
 
-    public static ResponseMessage warning(String text) {
+    public static ResponseMessage warning(Object text) {
         return new ResponseMessage(Type.WARNING, text, true);
     }
 
-    public static ResponseMessage danger(String text) {
+    public static ResponseMessage danger(Object text) {
         return new ResponseMessage(Type.DANGER, text, false);
     }
 
-    public static ResponseMessage info(String text) {
+    public static ResponseMessage info(Object text) {
         return new ResponseMessage(Type.INFO, text, true);
     }
     
-    public static ResponseMessage generateError(List<Error> errors) {
+    public static ResponseMessage addException(ErrorInfo error) {
+    	
+    	return setException(Arrays.asList(error));
+    }
+    
+    public static ResponseMessage setException(List<ErrorInfo> errors) {
+    	
     	return new ResponseMessage(Type.DANGER, null, false, errors);
     }
     
     public static ResponseMessage generateNullData() {
-    	return new ResponseMessage(Type.WARNING, null, false, null);
+    	
+    	return new ResponseMessage(Type.WARNING, null, true, null);
     }
-    
-    public List<Error> getErrors() {
-        return errors;
-    }
-
-    public void setErrors(List<Error> errors) {
-        this.errors = errors;
-    }
-
-    public void addError(String field, String code, String message) {
-        this.errors.add(new Error(field, code, message));
-    }
-    
-    public void addNullPointerError(String message) {
-    	this.errors.add(new Error("java.lang.NullPointerException", "500", message));
-    }
-
-    class Error {
-
-        private final String code;	//the appointment between frontend and backstage
-        private final String message;	//the error message
-        private final String field;		//the exception type or the error field
-
-        private Error(String field, String code, String message) {
-            this.field = field;
-            this.code = code;
-            this.message = message;
-        }
-
-        public String getCode() {
-            return code;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public String getField() {
-            return field;
-        }
-
-    }
-
 }
